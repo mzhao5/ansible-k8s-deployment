@@ -1,0 +1,19 @@
+---
+- name: load br_netfilter module
+  modprobe: name=br_netfilter state=present
+
+- name: Letting iptables see bridged traffic
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: no
+
+- name: Letting ip6tables see bridged traffic
+  sysctl:
+    name: net.bridge.bridge-nf-call-ip6tables
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: yes

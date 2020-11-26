@@ -1,0 +1,8 @@
+---
+- include: 1_system_prepare.yaml
+- include: 2_load_module_br_netfilter.yaml
+- include: 3_copy_aliyun_yum_repo.yaml
+- include: 4_install_docker.yaml
+- include: 5_copy_docker_daemon_jason.yaml
+- include: 6_start_enable_docker.yaml
+- include: 7_install_k8s_packages.yaml

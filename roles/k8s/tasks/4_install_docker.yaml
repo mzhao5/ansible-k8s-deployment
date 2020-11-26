@@ -1,0 +1,11 @@
+---
+- name: installing package pre docker
+  yum:
+    name:
+      - yum-utils
+      - device-mapper-persistent-data
+      - lvm2
+    state: present
+
+- name: installing docker
+  yum: name=docker-ce state=present

@@ -1,0 +1,11 @@
+---
+- name: creating /etc/docker folder
+  file:
+    path: /etc/docker
+    state: directory
+    mode: '0755'
+
+- name: copying docker daemon.json to docker folder.
+  copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json

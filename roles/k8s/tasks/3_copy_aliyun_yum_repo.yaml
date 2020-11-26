@@ -1,0 +1,19 @@
+---
+- name: copying docker yum repo file
+  copy: 
+    src: docker-ce.repo
+    dest: /etc/yum.repos.d/docker-ce.repo
+    mode: '0644'
+    owner: root
+
+- name: copying kubenetes yum repo file
+  copy:
+    src: k8s.repo
+    dest: /etc/yum.repos.d/k8s.repo
+    mode: '0644'
+    owner: root
+
+- name: yum makecach
+  yum:
+    update_cache: yes
+    state: latest

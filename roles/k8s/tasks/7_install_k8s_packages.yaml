@@ -1,0 +1,5 @@
+---
+- name: installing k8s packages
+  yum:
+    name: [ kubelet,kubeadm,kubectl]
+    state: present

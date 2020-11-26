@@ -1,0 +1,5 @@
+---
+- name: k8s ansible installation for CentOS
+  hosts: k8s
+  roles:
+    - k8s

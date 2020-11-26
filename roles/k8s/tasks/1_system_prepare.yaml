@@ -1,0 +1,15 @@
+- name: 1.disable selinux
+  selinux: state=disabled
+
+- name: 2.disable SWAP
+  shell: swapoff -av
+
+- name: modify fstab file to permanent disable swap
+  lineinfile: path=/etc/fstab regexp=swap state=absent
+
+- name: get swap
+  shell: free
+  register: result
+
+- name: print swap result
+  debug: var=result.stdout_lines[2]
