@@ -16,4 +16,29 @@
     value: '1'
     sysctl_set: yes
     state: present
+    reload: no 
+
+- name: Eanble net.ipv4.ip_forward
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: '1'
+    sysctl_set: yes
+    state: present
+    reload: no
+
+- name: disable net.ipv4.tcp_tw_recycle
+  sysctl:
+    name: net.ipv4.tcp_tw_recycle
+    value: '0'
+    sysctl_set: yes
+    state: present
     reload: yes
+
+- name: copying ipvs.modules shell file
+  copy:
+    src: ipvs.modules
+    dest: /etc/sysconfig/modules/ipvs.modules
+    mode: '0755'
+
+- name: run ipvs.modules
+  command: bash /etc/sysconfig/modules/ipvs.modules

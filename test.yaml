@@ -1,0 +1,7 @@
+---
+- hosts: k8s-node02 
+  tasks:
+   - name: 'kernel version from facts'
+     debug:
+      msg: '{{ansible_all_ipv4_addresses}} {{ansible_kernel}}'
+     when:  ansible_kernel is  version('3.10.0-957','<') 

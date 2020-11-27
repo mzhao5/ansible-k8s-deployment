@@ -3,3 +3,8 @@
   yum:
     name: [ kubelet,kubeadm,kubectl]
     state: present
+
+- name: enable auto start kubelet
+  systemd:
+    name: kubelet
+    enabled: yes

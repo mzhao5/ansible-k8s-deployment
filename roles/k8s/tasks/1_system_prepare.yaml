@@ -13,3 +13,88 @@
 
 - name: print swap result
   debug: var=result.stdout_lines[2]
+
+- name: disable firewalld
+  systemd:
+    name: firewalld
+    state: stopped
+    enabled: no
+
+- name: install packages
+  yum:
+    name: [ conntrack,ipvsadm,ipset,iptables,iptables-services,curl,sysstat,libseccomp,wget,vim,net-tools,git]
+    state: present
+    update_cache: yes
+
+- name: enable iptables-services
+  systemd:
+    name: iptables
+    state: started
+    enabled: yes
+
+- name: disable no use services
+  systemd:
+    name: postfix
+    state: stopped
+    enabled: no
+
+- name: set time zone
+  timezone:
+    name: Asia/Shanghai
+
+- name: Creating systemd journald log folder
+  file:
+    path: /var/log/journal
+    state: directory
+
+- name: Creating System Journald log config folder
+  file:
+    path: /etc/systemd/journald.conf.d
+    state: directory
+
+- name: Copying System Journald config file
+  copy:
+    src: 99-prophet.conf
+    dest: /etc/systemd/journald.conf.d/99-prophpet.conf
+    owner: root
+    mode: '0644'
+
+- name: restarting systemd-journald
+  systemd:
+    name: systemd-journald
+    state: restarted 
+
+- name: import rpm key
+  rpm_key:
+    state: present
+    key: https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+  when: ansible_kernel is version('3.11.0-957','<=')
+
+- name: install elp rpm for kernal updating
+  yum:
+    name: https://www.elrepo.org/elrepo-release-7.0-3.el7.elrepo.noarch.rpm
+  when: ansible_kernel is version('3.11.0-957','<=')
+
+- name: install kernal
+  yum:
+    name: kernel-lt
+    enablerepo: elrepo-kernel
+    state: present 
+    update_cache: yes
+  when: ansible_kernel is version('3.11.0-957','<=')
+
+- name: set default boot to new kernel
+  shell: grub2-set-default 0
+  when: ansible_kernel is version('3.11.0-957','<=')
+
+- name: reboot server
+  reboot:
+  when: ansible_kernel is version('3.11.0-957','<=')
+#- name: waiting for reboot complete and connect back again, hopefully finish..............
+#  pause: minutes=5
+
+- name: Wait for re-connecting.
+  wait_for_connection:
+    sleep: 5
+    delay: 30
+    timeout: 240
